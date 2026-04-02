@@ -13,8 +13,8 @@ const Header = ({ tab, setTab }: IHeader) => {
     }
 
     return (
-        <header className="top-0 sticky bg-white">
-            <div className="relative flex justify-center items-center mx-auto max-w-400 h-20">
+        <header className="top-0 z-50 sticky bg-white">
+            <div className="z-50 relative flex justify-center items-center mx-auto max-w-400 h-20">
                 <div className="top-0 left-0 absolute flex items-center h-full">
                     <Typography
                         variant="title1"
@@ -27,9 +27,9 @@ const Header = ({ tab, setTab }: IHeader) => {
                         menu.map((label, idx) => (
                             <div
                                 onClick={() => changeTab(idx)}
+                                key={idx}
                             >
                                 <Typography
-                                    key={idx}
                                     variant="body1"
                                     title={label}
                                     className={`border-b cursor-pointer ${tab === idx ? 'border-primary' : 'border-transparent'}`}

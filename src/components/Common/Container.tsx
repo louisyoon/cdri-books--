@@ -1,11 +1,11 @@
 interface IConatainer {
     children: React.ReactNode
+    className?: React.HTMLAttributes<HTMLElement>["className"];
 }
 
-
-const Container = ({ children }: IConatainer) => {
+const Container = ({ children, className }: IConatainer) => {
     return (
-        <div className="container">
+        <div className={`container ${className ? className : ''}`}>
             {children}
         </div>
     )
