@@ -5,7 +5,7 @@ import SearchIcon from "@/assets/icon/search.svg?react"
 import NoData from "@/assets/icon/nodata.svg?react"
 import XMark from "@/assets/icon/xMark.svg?react"
 import { useBookSearch } from "@/hooks/useBookSearch"
-import CustomButton from "@/components/Common/CustomButton"
+import BookArea from "../BookArea"
 
 const getHistory = (): string[] => {
     try {
@@ -34,7 +34,6 @@ const Section1 = () => {
     const [query, setQuery] = useState<string>("")
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
 
     const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useBookSearch(query)
     const books = data?.pages.flatMap((p) => p.documents) ?? []
@@ -98,6 +97,7 @@ const Section1 = () => {
     // 히스토리 노출 여부
     const isShowHistory = isFocused && history.length > 0
 
+    // 상세검색 버튼이벤트
     const handleBtn = () => {
         handleSearch(value)
         setIsFocused(false)
@@ -190,54 +190,13 @@ const Section1 = () => {
                         <div className="mt-9">
                             {
                                 books.map((book, idx) => (
-                                    <div
-                                        className="flex flex-col py-4 border-[#D2D6DA] border-b"
+                                    <BookArea
                                         key={idx}
-                                    >
-                                        <div className="flex justify-between items-center">
-                                            <div className={`mx-12 shrink-0 transition-all duration-300 ${selectedIdx === idx ? "w-24 h-34" : "w-12 h-17"}`}>
-                                                <img src={book.thumbnail} alt={book.title} className="w-full h-full object-cover" />
-                                            </div>
-                                            <div className="flex flex-1 items-center gap-[1.375rem]">
-                                                <div className="flex items-center gap-4 w-102">
-                                                    <Typography
-                                                        variant="title3"
-                                                        title={book.title}
-                                                        className="truncate"
-                                                    />
-                                                    <Typography
-                                                        variant="body2"
-                                                        title={book.authors.join(', ')}
-                                                        className="text-t-secondary shrink-0"
-                                                    />
-                                                </div>
-                                                <Typography
-                                                    variant="title3"
-                                                    title={`${(book.price * 1000).toLocaleString()}원`}
-                                                />
-                                            </div>
-                                            <div className="flex items-center gap-2 px-4">
-                                                <CustomButton
-                                                    label="구매하기"
-                                                    onClick={() => window.open(book.url, "_blank")}
-                                                />
-                                                <CustomButton
-                                                    label="상세보기"
-                                                    onClick={() => setSelectedIdx(selectedIdx === idx ? null : idx)}
-                                                />
-                                            </div>
-                                        </div>
-                                        {selectedIdx === idx && (
-                                            <div className="flex gap-4 mx-12 mt-4 pl-0">
-                                                <div className="flex-1 text-t-secondary text-sm line-clamp-4 leading-relaxed">
-                                                    {book.contents || "상세 내용이 없습니다."}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
+                                        book={book}
+                                        idx={idx}
+                                    />
                                 ))
                             }
-                            {/* {JSON.stringify(books)} */}
                             <div ref={observerRef} className="h-1" />
                             {isFetchingNextPage && (
                                 <div className="flex justify-center py-4">
